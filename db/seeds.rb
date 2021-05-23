@@ -9,9 +9,9 @@
 
 AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if Rails.env.development?
 
-#50.times do
-    #Tweet.create(content: 
-        #Faker::Movies::PrincessBride.quote,
-        #user_id: rand(1..3)
-    #)
-#end
+50.times do
+    Tweet.create(content: 
+        Faker::Movies::PrincessBride.quote,
+        user_id: rand(1..3)
+    )
+end
