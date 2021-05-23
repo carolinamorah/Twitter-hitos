@@ -2,7 +2,7 @@ class Tweet < ApplicationRecord
     belongs_to :user
     has_many :likes, dependent: :destroy
     validates :content, presence: true
-    paginates_per 10
+    paginates_per 50
     #se define un metodo que guarda el campo del rt_ref encontrado del tweet
     
     scope :tweets_for_me, -> (user) { Tweet.where(user_id: user.friends.pluck(:friend_id).uniq) }
