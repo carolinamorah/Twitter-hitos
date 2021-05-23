@@ -50,8 +50,8 @@ class TweetsController < ApplicationController
   # POST /tweets or /tweets.json
   def create
     
-      @tweet = Tweet.new(content: params(user: current_user))
-      #@tweet = current_user.tweets.build(tweet_params)
+      #@tweet = Tweet.new(content: params(user: current_user))
+      @tweet = current_user.tweets.build(tweet_params)
 
       respond_to do |format|
         if @tweet.save
