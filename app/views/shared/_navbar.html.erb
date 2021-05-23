@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-info">
+    <div class="my-auto mx-4">
+        <a class="navbar-brand text-white" href="<%=root_path %>"><strong> Inicio</strong><i class="fab fa-twitter"></i></a>
+    </div>
+    <ul class="navbar-nav">
+        <% if user_signed_in? %>
+            <li><%= button_to "Logout", destroy_user_session_path, method: :delete, :class => 'btn btn-primary mx-4'  %></li>
+            <li><%= button_to "My Tweets", mytweets_index_path, method: :get, :class => 'btn btn-primary mx-4'  %></li>
+        <% else %>
+            <li><%= button_to 'Ingresar', new_user_session_path, :class => 'btn btn-primary mx-4' %></li>
+            <li><%= button_to 'Registrarse', new_user_registration_path, method: :get, :class => 'btn btn-primary mx-4' %></li>
+        <% end %>
+    </ul>
+
+    <% if user_signed_in?  %>
+        <div class="container mx-auto">
+            <b><p class="text-white" >Bienvenido(a) <%= current_user.user_name %> <img src="<%= current_user.user_photo %>" width="40" height="40" class="rounded-circle mb-2" ></p></b>
+        </div>
+    <%end%>
+    <br>
+
+    <form class="form-inline">
+        <div class="d-inline-block">
+            <input class="form-control" type="search" placeholder="Buscar" aria-label="Buscar" name="tweetsearch">
+        </div>
+        <div class="d-inline-block">
+            <button class="btn btn-outline-light" type="submit">Buscar</button>
+        </div>
+    </form>
+
+</nav>

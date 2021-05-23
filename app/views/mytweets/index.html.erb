@@ -1,0 +1,105 @@
+<br>
+
+<br>
+<%= form_with(model: @tweet, local: true) do |form| %>
+    <% if @tweet.errors.any? %>
+        <div id="error_explanation">
+            <h2><%= pluralize(@tweet.errors.count, "error") %> prohibited this tweet from being saved:</h2>
+
+            <ul>
+            <% @tweet.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+            </ul>
+            </div>
+    <% end %>
+
+<div class="card text-center mx-auto col-md-6 mb-3">
+    <h3 class="card-title py-3">¿Qué está pasando?</h3>
+    <div class="form-group">
+        <%= form.text_area(:content, rows: 3, class: 'col-md-7') %>
+    </div>
+    <div class="actions my-2">
+        <%= form.submit "Twittea", :class => 'btn btn-primary' %>
+    </div>
+</div>
+<% end %>
+
+
+<% @tweets.each do |tweet| %>
+
+    <div class="card col-md-6 mb-3 bg-light tweet-list">
+        <div class="row no-gutters">
+            <div class="col-md-2 py-4"> 
+                <img src="<%= tweet.user&.user_photo %>"width="80" height="80" class="rounded-circle mb-2 mx-4" >  
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-user pr-8"><%= tweet.user.user_name %> .
+                        <small class="text-muted display-12"><%= link_to time_ago_in_words(tweet.created_at),tweet %></small>
+                    </h5>
+                    <p class="card-text">
+                    <% content_tweet_array = tweet.content.split%>
+                    <% content_tweet_array.each do |element|%>
+                        <% if element.start_with?("#") %>
+                            <% element.slice!(0) %>
+                            <a href="?hashtag=<%= element %>">#<%= element %></a>
+                        <% else %>
+                        <%= element %>
+                        <% end %>
+                    <% end %>  
+                    </p>  
+                </div>
+            </div>
+            <% if user_signed_in? %>
+                <div class="col-md-2">
+                <small class="text-muted"><%= link_to 'Show', tweet %></small>
+                <% if tweet.user_id == current_user.id %>
+                    <small class="text-muted"><%= link_to 'Edit', edit_tweet_path(tweet) %></small>
+                    <small class="text-muted"><%= link_to 'Delete', tweet, method: :delete, data: { confirm: 'Are you sure?' }  %></small>
+                <%end%>
+                </div>
+            <%end%>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <% if !tweet.rt_ref.nil? %>
+                    <small class="text-muted ms-4"><%= link_to "#{tweet.user.user_name} lo retwitteó", tweet.retweet_ref %></small>
+                <% end %>
+            </div>
+
+            <div class="col-md-4">
+                <%= link_to retweet_tweet_path(tweet), data: { confirm: 'do you want to retweet'}, method: :post do %>
+                    <span class="icon"><i class="fas fa-retweet fa"></i></span>
+                <% end %>
+                <%= tweet.retweet %>     
+            </div>
+
+
+                <%= tweet.likes.count %>
+                <% if user_signed_in? %>
+                    <div class="col-md-2">
+                        <% if like(tweet, current_user) %>
+                            <%= link_to tweet_like_path(tweet,like(tweet, current_user)), method: :delete do %>
+                                <span class="icon-danger"><i class="fas fa-heart fa"></i></span>
+                            <%end%>  
+                    </div>
+
+                        <% else  %>
+                    <div class="col-md-2">
+                            <%= link_to tweet_likes_path(tweet), method: :post do %>
+                                <span class="icon-white"><i class="far fa-heart fa"></i></span>
+                            <%end%>
+                    </div>  
+                        <%end%>
+                <%end%>
+        </div>
+    </div>
+</div>
+<% end %>
+
+
+<div class="text-center"><%= link_to_next_page @tweets, '>>Show More Tweets' %> |
+    <%= link_to_prev_page @tweets, '<<Show Previous Tweets' %>
+</div>

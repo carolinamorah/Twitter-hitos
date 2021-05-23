@@ -1,0 +1,30 @@
+<aside class="users-list">
+  <% if  user_signed_in?%> 
+      <h3 class="text-center">A quién seguir</h3>
+      <br>
+    
+    <!--usuarios-->
+
+    <% @users.each do |user|%>
+      <% if pre_follow(user)%>
+          <div class="text-center">
+                <img src="<%= user.user_photo %>"width="60" height="60" class="rounded-circle mb-2 mx-4" >
+                <h5 class="user_name pl-2"><%= user.user_name %></h5>
+                <%= button_to "unfollow", unfollow_user_path(user.id), method: :delete, :class => 'btn btn-outline-light mx-4'%>
+                <br>
+            <div>
+        <% else %>
+          <div class="text-center">
+                <img src="<%= user.user_photo %>"width="60" height="60" class="rounded-circle mb-2 mx-4" >
+                <h5 class="user_name pl-2"><%= user.user_name %></h5>
+                <%= button_to "follow", follow_user_path(user.id), method: :post, :class => 'btn btn-outline-light mx-4'%>
+                <br>
+            <div>
+      <% end %>
+    <% end %> 
+  <%end%>
+
+</aside>
+  
+
+
